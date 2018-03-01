@@ -1,0 +1,5 @@
+__pycache__
+autoencoders_keras/__pycache__
+.*
+!*lattice*.png
+!/.gitignore
