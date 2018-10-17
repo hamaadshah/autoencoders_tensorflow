@@ -170,8 +170,16 @@ class VariationalAutoencoder(BaseEstimator,
     def vae_loss(self,
                  y_true,
                  y_pred):
-        recon = self.n_feat * keras.metrics.mean_squared_error(y_true=y_true, y_pred=y_pred)
-        kl = -0.5 * keras.backend.mean(1.0 + self.log_sigma - keras.backend.exp(self.log_sigma) - keras.backend.square(self.mu), axis=-1)
-        out = keras.backend.mean(recon + kl)
+        recon = self.n_feat * keras.metrics.mean_squared_error(y_true=y_true,
+                                                               y_pred=y_pred)
+        
+        # For 2D axis 0 mean columns wise, i.e., across all rows average up all columns per row.
+        # For 2D axis 1 means row wise, i.e., across all columns average up all rows per column.
+        # For 2D axis -1 means row wise, i.e., across all columns average up all rows per column.
+        kl = -0.5 * keras.backend.sum(x=1.0 + self.log_sigma - keras.backend.exp(self.log_sigma) - keras.backend.square(self.mu),
+                                      axis=1)
+
+        out = recon + keras.backend.mean(x=kl,
+                                         axis=0)
             
         return out
