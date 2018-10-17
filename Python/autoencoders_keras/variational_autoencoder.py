@@ -173,12 +173,15 @@ class VariationalAutoencoder(BaseEstimator,
         recon = self.n_feat * keras.metrics.mean_squared_error(y_true=y_true,
                                                                y_pred=y_pred)
         
-        # For 2D axis 0 mean columns wise, i.e., across all rows average up all columns per row.
-        # For 2D axis 1 means row wise, i.e., across all columns average up all rows per column.
-        # For 2D axis -1 means row wise, i.e., across all columns average up all rows per column.
+        # For 2D axis 0 means columns wise, i.e., across all rows sum up all columns per row.
+        # For 2D axis 1 means row wise, i.e., across all columns sum up all rows per column.
+        # For 2D axis -1 means row wise, i.e., across all columns sum up all rows per column.
         kl = -0.5 * keras.backend.sum(x=1.0 + self.log_sigma - keras.backend.exp(self.log_sigma) - keras.backend.square(self.mu),
                                       axis=1)
 
+        # For 2D axis 0 means columns wise, i.e., across all rows average up all columns per row.
+        # For 2D axis 1 means row wise, i.e., across all columns average up all rows per column.
+        # For 2D axis -1 means row wise, i.e., across all columns average up all rows per column.
         out = recon + keras.backend.mean(x=kl,
                                          axis=0)
             
