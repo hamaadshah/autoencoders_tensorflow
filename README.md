@@ -4,4 +4,6 @@ We will explore the use of autoencoders for automatic feature engineering. The i
 
 ### Python environment
 
+```
 pip3 install -r requirements.txt
+```
